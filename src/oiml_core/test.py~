@@ -1,0 +1,85 @@
+import unittest
+import oiml_core
+
+class Empty(unittest.TestCase):
+    def test_1(self):
+        src = ""
+        res = oiml_core.parse(src)
+        self.assertLessEqual(len(res), 0, 'empty string should output empty list of block')
+    def test_2(self):
+        src = '      '
+        res = oiml_core.parse(src)
+        self.assertLessEqual(len(res), 0, 'empty string should output empty list of block')
+    def test_3(self):
+        src = '// comment comment'
+        res = oiml_core.parse(src)
+        self.assertLessEqual(len(res), 0, 'empty string should output empty list of block')
+    def test_4(self):
+        src = '   \n    \t \n  // comment comment\n\n'
+        res = oiml_core.parse(src)
+        self.assertLessEqual(len(res), 0, 'emtpy string should output empty list of block')
+
+
+class SimpleCmd(unittest.TestCase):
+    def test_1(self):
+        src = 'a'
+        res = oiml_core.parse(src)
+        self.assertEqual(len(res), 1, 'should output 1 block')
+        self.assertEqual(res[0].B, None, 'should have no B part')
+        self.assertEqual(res[0].C, None, 'should have no C part')
+        self.assertTrue(bool(res[0].A), 'should have an A part')
+        self.assertEqual(len(res[0].A), 1, 'should have an A part of length 1.')
+        self.assertEqual(type(res[0].A[0]), str, 'first element of A part should be string.')
+        self.assertEqual(res[0].A[0], 'a', 'first element of A part should be "a".')
+
+    def test_2(self):
+        src = 'a b c #true #false 0x3 4.5'
+        res = oiml_core.parse(src)
+        self.assertEqual(len(res), 1, 'should output 1 block')
+        self.assertEqual(res[0].B, None, 'should have no B part')
+        self.assertEqual(res[0].C, None, 'should have no C part')
+        self.assertTrue(bool(res[0].A), 'should have an A part')
+        self.assertEqual(len(res[0].A), 7, 'should have an A part of length 7')
+        self.assertIs(type(res[0].A[0]), str, 'first element of A part should be string')
+        self.assertIs(type(res[0].A[1]), str, 'first element of A part should be string')
+        self.assertIs(type(res[0].A[2]), str, 'first element of A part should be string')
+        self.assertIs(type(res[0].A[3]), bool, 'first element of A part should be bool')
+        self.assertIs(type(res[0].A[4]), bool, 'first element of A part should be bool')
+        self.assertIs(type(res[0].A[5]), int, 'first element of A part should be int')
+        self.assertIs(type(res[0].A[6]), float, 'first element of A part should be float')
+        self.assertEqual(res[0].A[0], 'a', 'first element of A part should be "a".')
+        self.assertEqual(res[0].A[1], 'b', 'second element of A part should be "b".')
+        self.assertEqual(res[0].A[2], 'c', 'third element of A part should be "c".')
+        self.assertEqual(res[0].A[3], True, 'fourth element of A part should be True.')
+        self.assertEqual(res[0].A[4], False, 'fifth element of A part should be False.')
+        self.assertEqual(res[0].A[5], 0x3, 'sixth element of A part should be 0x3.')
+        self.assertEqual(res[0].A[6], 4.5, 'seventh element of A part should be 4.5.')
+
+    def test_3(self):
+        src = '0x3 0o4 0b1001 3 4.5 -0.67 8.69e10 4.56E2 -9.10e-3'
+        res = oiml_core.parse(src)
+        self.assertEqual(len(res), 1, 'should output 1 block')
+        self.assertEqual(res[0].B, None, 'should have no B part')
+        self.assertEqual(res[0].C, None, 'should have no C part')
+        self.assertTrue(bool(res[0].A), 'should have an A part')
+        self.assertEqual(len(res[0].A), 9, 'should have an A part of length 9')
+        self.assertIs(type(res[0].A[0]), int, 'first element of A part should be string')
+        self.assertIs(type(res[0].A[1]), int, 'first element of A part should be string')
+        self.assertIs(type(res[0].A[2]), int, 'first element of A part should be string')
+        self.assertIs(type(res[0].A[3]), int, 'first element of A part should be bool')
+        self.assertIs(type(res[0].A[4]), float, 'first element of A part should be bool')
+        self.assertIs(type(res[0].A[5]), float, 'first element of A part should be int')
+        self.assertIs(type(res[0].A[6]), float, 'first element of A part should be float')
+        self.assertIs(type(res[0].A[7]), float, 'first element of A part should be int')
+        self.assertIs(type(res[0].A[8]), float, 'first element of A part should be float')
+        self.assertEqual(res[0].A[0], 'a', 'first element of A part should be "a".')
+        self.assertEqual(res[0].A[1], 'b', 'second element of A part should be "b".')
+        self.assertEqual(res[0].A[2], 'c', 'third element of A part should be "c".')
+        self.assertEqual(res[0].A[3], True, 'fourth element of A part should be True.')
+        self.assertEqual(res[0].A[4], False, 'fifth element of A part should be False.')
+        self.assertEqual(res[0].A[5], 0x3, 'sixth element of A part should be 0x3.')
+        self.assertEqual(res[0].A[6], 4.5, 'seventh element of A part should be 4.5.')
+
+    def test
+if __name__ == '__main__':
+    unittest.main()
